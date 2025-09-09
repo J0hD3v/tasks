@@ -30,7 +30,7 @@ jobs:
     steps:
       # Récupération du code
       - name: Checkout
-        uses: actions:checkout@v4
+        uses: actions/checkout@v4
 
       # Installation de PHp et Composer
       - name: Setup PHP CLI (Composer & outils)
