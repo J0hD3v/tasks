@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  # Nom du CI/CD
+  # Nom du CI/CD 
   ci-cd:
     runs-on: ubuntu-latest
     # Service Base de données MySQL
