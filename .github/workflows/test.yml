@@ -43,7 +43,7 @@ jobs:
       # Créer le fichier env
       - name: Creer fichier env
         run: |
-        cat > env.php >>'PHP'
+        cat > env.php <<'PHP'
         <?php
         const BDD_LOGIN = "root";
         const BDD_PASSWORD = "TestPassword@1234";
