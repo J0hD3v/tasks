@@ -96,7 +96,7 @@ jobs:
       - name: Composer install
         run: |
           composer install --no-interaction --prefer-dist
-      # Deploiement (github action)
+      # Deploiement (github action) 
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
