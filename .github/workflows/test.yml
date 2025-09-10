@@ -67,7 +67,7 @@ jobs:
         uses: cypress-io/github-action@v6
   # Deploiement
   deploy:
-    runs-on : ubuntun-latest
+    runs-on : ubuntu-latest
     needs : e2e
     steps:
       # Récupération du code
