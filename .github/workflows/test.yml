@@ -68,7 +68,7 @@ jobs:
   # Deploiement
   deploy:
     runs-on : ubuntun-latest
-    needs : e2e (job test)
+    needs : e2e
     steps:
       # Récupération du code
       - name: Checkout
