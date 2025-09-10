@@ -10,7 +10,7 @@ on:
 
 jobs:
   # Nom du CI/CD 
-  ci-cd:
+  e2e:
     runs-on: ubuntu-latest
     # Service Base de données MySQL
     services:
@@ -31,7 +31,6 @@ jobs:
       # Récupération du code
       - name: Checkout
         uses: actions/checkout@v4
-
       # Installation de PHp et Composer
       - name: Setup PHP CLI (Composer & outils)
         uses: shivammathur/setup-php@v2
@@ -54,7 +53,7 @@ jobs:
       # Installer les dépendances PHP
       - name: Composer install
         run: |
-          composer install
+          composer install --no-interaction --prefer-dist
       # Migration BDD
       - name: Migration BDD
         run: |
@@ -66,4 +65,41 @@ jobs:
       # Installer et démarrer les tests Cypress
       - name: Test Cypress
         uses: cypress-io/github-action@v6
-
+  # Deploiement
+  deploy:
+    runs-on : ubuntun-latest
+    needs : e2e (job test)
+    steps:
+      # Récupération du code
+      - name: Checkout
+        uses: actions/checkout@v4
+      # Installation de PHp et Composer
+      - name: Setup PHP CLI (Composer & outils)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, intl, pdo_mysql, sodium, zip
+          coverage: none
+          tools: composer
+      # Créer le fichier env
+      - name: Creer fichier env
+        run: |
+          cat > env.php <<'PHP'
+          <?php
+          const BDD_LOGIN = "${{ secrets.BDD_USERNAME }}";
+          const BDD_PASSWORD = "${{ secrets.BDD_PASSWORD }}";
+          const BDD_SERVER = "${{ secrets.BDD_HOST }}";
+          const BDD_NAME = "${{ secrets.BDD_NAME }}";
+          const BASE_URL = "/";
+          PHP
+      # Installer les dépendances PHP
+      - name: Composer install
+        run: |
+          composer install --no-interaction --prefer-dist
+      # Deploiement (github action)
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
